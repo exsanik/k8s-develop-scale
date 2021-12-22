@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nest-deployment
+  namespace: nest
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: web
+
+  template:
+    metadata:
+      labels:
+        component: web
+    spec:
+      containers: 
+        - name: nest
+          image: exsanik/nest-api
+          imagePullPolicy: Never
+          ports: 
+            - name: server-port
+              containerPort: 3000
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: server-port
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: server-port
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: "1"
+            requests:
+              memory: 256Mi
+              cpu: "0.2"
+

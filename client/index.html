@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container d-flex flex-column" style="height: 100vh">
+        <div class="row m-auto" style="margin-bottom: 0px !important;">
+            <input type="number" class="form-control mb-2 input-box" placeholder="Number to factor" />
+            <button type="button" id="" class="btn btn-primary mx-auto submit-button">Get factorization</button>
+        </div>
+        <div class="row m-auto" style="margin-top: 0px !important;">
+            <div class="mx-auto result-box w-100 text-center mt-2"></div>
+        </div>
+    </div>
+</body>
+
+<script>
+    const inputBox = document.querySelector(".input-box");
+
+    const invalidChars = ["-", "+", "e"];
+
+    inputBox.addEventListener("keydown", function (e) {
+        if (invalidChars.includes(e.key)) {
+            e.preventDefault();
+        }
+    });
+
+    const submitButton = document.querySelector('.submit-button')
+    submitButton.onclick = async () => {
+        const inputValue = inputBox.value
+        const resultBox = document.querySelector('.result-box')
+
+        resultBox.innerText = 'loading...'
+
+        const resp = await fetch(`/api?number=${inputValue}`)
+        const data = await resp.json()
+
+        resultBox.innerText = data.join(' ')
+    }
+</script>
+
+</html>
